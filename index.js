@@ -1,8 +1,9 @@
 (function (window, document) {
 
     var EMPY = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==',
-        IMAGE_SET_RE = /url\('?([^'\)]+)'?\)\s*([\d\.]+)x?/g,
-        PARSE_IMAGE_SER_RE = /url\('?([^\')]+)'?\)\s*([\d\.]+)x?/,
+        IMAGE_SET_RE_TEPMLATE = 'url\\([\'"]?([^\'"\\)]+)[\'"]?\\)\\s*([\\d\\.]+)x?',
+        IMAGE_SET_RE = new RegExp(IMAGE_SET_RE_TEPMLATE, 'g'),
+        PARSE_IMAGE_SER_RE = new RegExp(IMAGE_SET_RE_TEPMLATE, '');
         devicePixelRatio = window.devicePixelRatio || 1;
         
     /**
@@ -12,9 +13,13 @@
      */
     function testImageSet() {
         var elem = document.createElement('div'),
+            style = [
+                'background-image:  -webkit-image-set(url(' + EMPY + ') 1.0x)',
+                'background-image:  image-set(url(' + EMPY + ') 1.0x)'
+            ].join(';'),
             support;
 
-        elem.setAttribute('style', 'background-image:  -webkit-image-set(url(' + EMPY + ') 1.0x)');
+        elem.setAttribute('style', style);
         document.body.appendChild(elem);
         support = IMAGE_SET_RE.test(window.getComputedStyle(elem).background);
         elem.parentNode.removeChild(elem);
@@ -78,8 +83,6 @@
 
         IMAGE_SET_RE.lastIndex = 0;
         while ((match = IMAGE_SET_RE.exec(bg))) {
-            image = match[1];
-            ratio = Number(match[2]);
             sizes.push([
                 Number(match[2]),
                 match[1]
