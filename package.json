@@ -1,0 +1,19 @@
+{
+    "name": "image-set-polyfill",
+    "version": "0.1.0",
+    "description": "polyfill for css4 image-set() function",
+    "keywords": [
+        "css",
+        "javascript",
+        "polyfill",
+        "image-set"
+    ],
+    "author": {
+        "name": "Evgeniy Filatov"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/wtfil/image-set-polyfill.git"
+    },
+    "main": "index"
+}

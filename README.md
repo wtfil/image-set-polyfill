@@ -4,6 +4,16 @@ polyfill for css4 function ```image-set()``` (http://dev.w3.org/csswg/css-images
 
 ## usage
 
+You can load polyfill with ```npm```
+
+    npm install image-set-polyfill
+
+in html
+```html
+<script type="text/javascript" src="image-set-polyfill.js"></script>
+```
+
+in css
 ```css
 .smart-image 
 {
