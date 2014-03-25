@@ -3,7 +3,7 @@
     var EMPY = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==',
         IMAGE_SET_RE_TEPMLATE = 'url\\([\'"]?([^\'"\\)]+)[\'"]?\\)\\s*([\\d\\.]+)x?',
         IMAGE_SET_RE = new RegExp(IMAGE_SET_RE_TEPMLATE, 'g'),
-        PARSE_IMAGE_SER_RE = new RegExp(IMAGE_SET_RE_TEPMLATE, '');
+        PARSE_IMAGE_SER_RE = new RegExp(IMAGE_SET_RE_TEPMLATE, ''),
         devicePixelRatio = window.devicePixelRatio || 1;
         
     /**
@@ -79,7 +79,7 @@
         var bg = getBackground(elem),
             match = bg.match(IMAGE_SET_RE),
             sizes = [],
-            prop, best;
+            best;
 
         IMAGE_SET_RE.lastIndex = 0;
         while ((match = IMAGE_SET_RE.exec(bg))) {
@@ -109,14 +109,16 @@
             lastIndex = 0,
             match, urls, best;
 
+        function urlMap(item) {
+            var m = item.match(PARSE_IMAGE_SER_RE);
+            return [
+                Number(m[2]),
+                m[1]
+            ];
+        }
+
         while ((match = findImageSetRE.exec(styles))) {
-            urls = match[1].split(/\s*,\s*/).map(function (item) {
-                var m = item.match(PARSE_IMAGE_SER_RE);
-                return [
-                    Number(m[2]),
-                    m[1]
-                ];
-            });
+            urls = match[1].split(/\s*,\s*/).map(urlMap);
             best = getBestSize(urls);
 
             newStyles += styles.slice(lastIndex, match.index) + best;
@@ -129,7 +131,7 @@
     /**
      * Running on document load
      */
-    function main () {
+    function main() {
         // replacing inline styles
         Array.prototype.forEach.call(document.querySelectorAll('*'), polyfillNode);
 
@@ -147,7 +149,9 @@
             appendChild = HTMLElement.prototype.appendChild,
             setAttribute = HTMLElement.prototype.setAttribute;
 
-        div.addEventListener('DOMNodeInserted', function () {supported = true;});
+        div.addEventListener('DOMNodeInserted', function () {
+            supported = true;
+        });
         div.appendChild(div.cloneNode(true));
 
         if (supported) {
@@ -161,14 +165,14 @@
             HTMLElement.prototype.appendChild = function (elem) {
                 polyfillNode(elem);
                 return appendChild.apply(this, arguments);
-            }
+            };
             HTMLElement.prototype.setAttribute = function (name, val) {
                 var r = setAttribute.apply(this, arguments);
                 if (name === 'style' && val.indexOf('background') !== -1) {
                     polyfillNode(this);
                 }
                 return r;
-            }
+            };
         }
     }
 
