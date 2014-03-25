@@ -138,12 +138,47 @@
 
     }
 
+    /**
+     * Make polyfill on new nodes and after modify styles
+     */
+    function eventsAttach() {
+        var div = document.createElement('div'),
+            supported = false,
+            appendChild = HTMLElement.prototype.appendChild,
+            setAttribute = HTMLElement.prototype.setAttribute;
+
+        div.addEventListener('DOMNodeInserted', function () {supported = true;});
+        div.appendChild(div.cloneNode(true));
+
+        if (supported) {
+            window.addEventListener('DOMNodeInserted', function (e) {
+                polyfillNode(e.originalTarget);
+            }, false);
+            window.addEventListener('DOMAttrModified', function (e) {
+                polyfillNode(e.originalTarget);
+            }, false);
+        } else {
+            HTMLElement.prototype.appendChild = function (elem) {
+                polyfillNode(elem);
+                return appendChild.apply(this, arguments);
+            }
+            HTMLElement.prototype.setAttribute = function (name, val) {
+                var r = setAttribute.apply(this, arguments);
+                if (name === 'style' && val.indexOf('background') !== -1) {
+                    polyfillNode(this);
+                }
+                return r;
+            }
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         if (testImageSet()) {
             return;
         }
 
         main();
+        eventsAttach();
     });
 
 }(window, document));
