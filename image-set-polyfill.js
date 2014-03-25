@@ -1,6 +1,6 @@
 (function (window, document) {
 
-    var EMPY = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==',
+    var EMPTY = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==',
         IMAGE_SET_RE_TEPMLATE = 'url\\([\'"]?([^\'"\\)]+)[\'"]?\\)\\s*([\\d\\.]+)x?',
         IMAGE_SET_RE = new RegExp(IMAGE_SET_RE_TEPMLATE, 'g'),
         PARSE_IMAGE_SER_RE = new RegExp(IMAGE_SET_RE_TEPMLATE, ''),
@@ -14,8 +14,8 @@
     function testImageSet() {
         var elem = document.createElement('div'),
             style = [
-                'background-image:  -webkit-image-set(url(' + EMPY + ') 1.0x)',
-                'background-image:  image-set(url(' + EMPY + ') 1.0x)'
+                'background-image:  -webkit-image-set(url(' + EMPTY + ') 1.0x)',
+                'background-image:  image-set(url(' + EMPTY + ') 1.0x)'
             ].join(';'),
             support;
 
