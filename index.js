@@ -1,8 +1,15 @@
 (function (window, document) {
+
     var EMPY = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==',
         IMAGE_SET_RE = /url\('?([^'\)]+)'?\)\s*([\d\.]+)x?/g,
+        PARSE_IMAGE_SER_RE = /url\('?([^\')]+)'?\)\s*([\d\.]+)x?/,
         devicePixelRatio = window.devicePixelRatio || 1;
         
+    /**
+     * image-set() feature detect
+     *
+     * @returns {Boolean}
+     */
     function testImageSet() {
         var elem = document.createElement('div'),
             support;
@@ -15,6 +22,11 @@
         return support;
     }
 
+    /**
+     * Gerring background from inline styles
+     *
+     * @returns {String}
+     */
     function getBackground(elem) {
         var style = elem.getAttribute('style'),
             bgs;
@@ -30,6 +42,14 @@
         return '';
     }
 
+    /**
+     * Getting best image for current DPI
+     *
+     * @param {Array} array of devicePixelRatio - image url pairs
+     *    [[1, 'url1'], [2, 'url2']]
+     *
+     * @returns {String} 'url(url1)'
+     */
     function getBestSize(sizes) {
         var key, set;
 
@@ -45,12 +65,18 @@
         return 'url(' + set[1] + ')';
     }
 
-    function polyfill(elem) {
+    /**
+     * Trying polyfill DOM node
+     *
+     * @param {HTMLElement}
+     */
+    function polyfillNode(elem) {
         var bg = getBackground(elem),
             match = bg.match(IMAGE_SET_RE),
             sizes = [],
             prop, best;
 
+        IMAGE_SET_RE.lastIndex = 0;
         while ((match = IMAGE_SET_RE.exec(bg))) {
             image = match[1];
             ratio = Number(match[2]);
@@ -68,16 +94,21 @@
         elem.style.backgroundImage = best;
     }
 
-    function parseStyle(styles) {
-        var findImageSetRE = /(?:\-(?:webkit|moz)\-)?image\-set\((.*)\)/g,
-            parseImageSetRE = /url\('?([^\')]+)'?\)\s*([\d\.]+)x?/,
+    /**
+     * Trying modify current styles
+     *
+     * @param {HTMLStyleElement}
+     */
+    function polyfillStyle(styleTag) {
+        var styles = styleTag.innerHTML,
+            findImageSetRE = /(?:\-(?:webkit|moz)\-)?image\-set\((.*)\)/g,
             newStyles = '',
             lastIndex = 0,
             match, urls, best;
 
         while ((match = findImageSetRE.exec(styles))) {
             urls = match[1].split(/\s*,\s*/).map(function (item) {
-                var m = item.match(parseImageSetRE);
+                var m = item.match(PARSE_IMAGE_SER_RE);
                 return [
                     Number(m[2]),
                     m[1]
@@ -89,18 +120,18 @@
             lastIndex = match.index + match[0].length;
         }
         newStyles += styles.slice(lastIndex);
-        return newStyles;
+        styleTag.innerHTML = newStyles;
     }
 
+    /**
+     * Running on document load
+     */
     function main () {
         // replacing inline styles
-        var elems = document.querySelectorAll('*');
-        Array.prototype.forEach.call(elems, polyfill);
+        Array.prototype.forEach.call(document.querySelectorAll('*'), polyfillNode);
 
         // replacing css styles
-        Array.prototype.forEach.call(document.querySelectorAll('style'), function (e) {
-            e.innerHTML = parseStyle(e.innerHTML);
-        });
+        Array.prototype.forEach.call(document.querySelectorAll('style'), polyfillStyle);
 
     }
 
