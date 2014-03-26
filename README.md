@@ -6,7 +6,7 @@ polyfill for css4 function ```image-set()``` (http://dev.w3.org/csswg/css-images
 
 in html
 ```html
-<script type="text/javascript" src="image-set-polyfill.js"></script>
+<script type="text/javascript" src="image-set-polyfill.min.js"></script>
 ```
 
 in css
