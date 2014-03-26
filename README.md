@@ -9,6 +9,8 @@ in html
 <script type="text/javascript" src="image-set-polyfill.min.js"></script>
 ```
 
+You can also load polyfill with npm ```npm i image-set-polyfill```
+
 in css
 ```css
 .smart-image 
