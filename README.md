@@ -4,14 +4,14 @@ polyfill for css4 function ```image-set()``` (http://dev.w3.org/csswg/css-images
 
 ## usage
 
-in html
+You should only inlude ```image-set-polyfill.js``` on your page
+
 ```html
 <script type="text/javascript" src="image-set-polyfill.min.js"></script>
 ```
+## supports
 
-You can also load polyfill with npm ```npm i image-set-polyfill```
-
-in css
+css styles
 ```css
 .smart-image 
 {
@@ -20,4 +20,9 @@ in css
         url('http://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Cat_poster_2.jpg/594px-Cat_poster_2.jpg') 2.0x
     );
 }
+```
+
+inline styles
+```html
+<div style="background-image: -webkit-image-set(url(lowdpi.png) 1.0x, url(highydpi.png) 2.0x )"></div>
 ```

@@ -2,8 +2,8 @@
 
     var EMPTY = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==',
         IMAGE_SET_RE_TEPMLATE = 'url\\([\'"]?([^\'"\\)]+)[\'"]?\\)\\s*([\\d\\.]+)x?',
-        IMAGE_SET_RE = new RegExp(IMAGE_SET_RE_TEPMLATE, 'g'),
-        PARSE_IMAGE_SER_RE = new RegExp(IMAGE_SET_RE_TEPMLATE, ''),
+        GET_IMAGE_SET_RE = new RegExp(IMAGE_SET_RE_TEPMLATE, 'g'),
+        GET_IMAGE_SET_IMAGE_URL_RE = new RegExp(IMAGE_SET_RE_TEPMLATE, ''),
         devicePixelRatio = window.devicePixelRatio || 1;
         
     /**
@@ -21,7 +21,7 @@
 
         elem.setAttribute('style', style);
         document.body.appendChild(elem);
-        support = IMAGE_SET_RE.test(window.getComputedStyle(elem).background);
+        support = GET_IMAGE_SET_RE.test(window.getComputedStyle(elem).background);
         elem.parentNode.removeChild(elem);
 
         return support;
@@ -77,12 +77,12 @@
      */
     function polyfillNode(elem) {
         var bg = getBackground(elem),
-            match = bg.match(IMAGE_SET_RE),
+            match = bg.match(GET_IMAGE_SET_RE),
             sizes = [],
             best;
 
-        IMAGE_SET_RE.lastIndex = 0;
-        while ((match = IMAGE_SET_RE.exec(bg))) {
+        GET_IMAGE_SET_RE.lastIndex = 0;
+        while ((match = GET_IMAGE_SET_RE.exec(bg))) {
             sizes.push([
                 Number(match[2]),
                 match[1]
@@ -110,7 +110,7 @@
             match, urls, best;
 
         function urlMap(item) {
-            var m = item.match(PARSE_IMAGE_SER_RE);
+            var m = item.match(GET_IMAGE_SET_IMAGE_URL_RE);
             return [
                 Number(m[2]),
                 m[1]
