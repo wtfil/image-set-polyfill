@@ -1,6 +1,6 @@
 {
     "name": "image-set-polyfill",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "polyfill for css4 image-set() function",
     "keywords": [
         "css",

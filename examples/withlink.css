@@ -1,0 +1,6 @@
+.test {
+    width: 200px;
+    height: 200px;
+    background-size: 100%;
+    background-image:  -webkit-image-set(url("http://upload.wikimedia.org/wikipedia/commons/2/22/Turkish_Van_Cat.jpg") 1.0x, url(http://img.wallbeam.com/53processed/little%20cat%20hd%20wallpapers.jpg) 2.0x);
+}

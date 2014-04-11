@@ -4,6 +4,7 @@
         IMAGE_SET_RE_TEPMLATE = 'url\\([\'"]?([^\'"\\)]+)[\'"]?\\)\\s*([\\d\\.]+)x?',
         GET_IMAGE_SET_RE = new RegExp(IMAGE_SET_RE_TEPMLATE, 'g'),
         GET_IMAGE_SET_IMAGE_URL_RE = new RegExp(IMAGE_SET_RE_TEPMLATE, ''),
+        forEach = Array.prototype.forEach,
         devicePixelRatio = window.devicePixelRatio || 1;
         
     /**
@@ -98,13 +99,14 @@
     }
 
     /**
-     * Trying modify current styles
+     * Making polyfilled styles based on non-polyfilled
      *
-     * @param {HTMLStyleElement}
+     * @param {String} styles
+     *
+     * @return {String} new styles
      */
-    function polyfillStyle(styleTag) {
-        var styles = styleTag.innerHTML,
-            findImageSetRE = /(?:\-(?:webkit|moz)\-)?image\-set\((.*)\)/g,
+    function getPolyfilledStyles(styles) {
+        var findImageSetRE = /(?:\-(?:webkit|moz)\-)?image\-set\((.*)\)/g,
             newStyles = '',
             lastIndex = 0,
             match, urls, best;
@@ -125,7 +127,37 @@
             lastIndex = match.index + match[0].length;
         }
         newStyles += styles.slice(lastIndex);
-        styleTag.innerHTML = newStyles;
+        return newStyles;
+    }
+
+    /**
+     * Trying modify current styles
+     *
+     * @param {HTMLStyleElement}
+     */
+    function polyfillStyle(styleTag) {
+        styleTag.innerHTML = getPolyfilledStyles(styleTag.innerHTML);
+    }
+
+    /**
+     * Trying polyfill link[rel="stylesheet"] tag
+     *
+     * @param {HTMLLinkElement}
+     */
+    function polifillLink(link) {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            var styleText, styleTag;
+            if (xhr.readyState === 4) {
+                styleText = getPolyfilledStyles(xhr.responseText);
+                styleTag = document.createElement('style');
+
+                styleTag.innerHTML = styleText;
+                link.parentNode.replaceChild(styleTag, link);
+            }
+        };
+        xhr.open('get', link.href);
+        xhr.send();
     }
 
     /**
@@ -133,10 +165,12 @@
      */
     function main() {
         // replacing inline styles
-        Array.prototype.forEach.call(document.querySelectorAll('*'), polyfillNode);
+        forEach.call(document.querySelectorAll('*'), polyfillNode);
 
         // replacing css styles
-        Array.prototype.forEach.call(document.querySelectorAll('style'), polyfillStyle);
+        forEach.call(document.querySelectorAll('style'), polyfillStyle);
+
+        forEach.call(document.querySelectorAll('link[rel="stylesheet"]'), polifillLink);
 
     }
 
