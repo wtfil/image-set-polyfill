@@ -1,0 +1,24 @@
+{
+  "name": "image-set-polyfill",
+  "main": "image-set-polyfill.js",
+  "version": "0.1.2",
+  "homepage": "https://github.com/wtfil/image-set-polyfill",
+  "authors": [
+    "Evgeniy Filatov"
+  ],
+  "description": "polyfill for css4 image-set() function",
+  "keywords": [
+    "css",
+    "javascript",
+    "polyfill",
+    "image-set"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
