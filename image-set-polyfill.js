@@ -6,7 +6,7 @@
         GET_IMAGE_SET_IMAGE_URL_RE = new RegExp(IMAGE_SET_RE_TEPMLATE, ''),
         forEach = Array.prototype.forEach,
         devicePixelRatio = window.devicePixelRatio || 1;
-        
+
     /**
      * image-set() feature detect
      *
@@ -106,7 +106,7 @@
      * @return {String} new styles
      */
     function getPolyfilledStyles(styles) {
-        var findImageSetRE = /(?:\-(?:webkit|moz)\-)?image\-set\((.*)\)/g,
+        var findImageSetRE = /(?:\-(?:webkit|moz)\-)?image\-set\(((?:a|[^a])*)\)/mg,
             newStyles = '',
             lastIndex = 0,
             match, urls, best;
