@@ -178,23 +178,26 @@
      * Make polyfill on new nodes and after modify styles
      */
     function eventsAttach() {
-        var div = document.createElement('div'),
-            supported = false,
-            appendChild = HTMLElement.prototype.appendChild,
-            setAttribute = HTMLElement.prototype.setAttribute;
+        var appendChild = HTMLElement.prototype.appendChild,
+            setAttribute = HTMLElement.prototype.setAttribute,
+            observer;
 
-        div.addEventListener('DOMNodeInserted', function () {
-            supported = true;
-        });
-        div.appendChild(div.cloneNode(true));
-
-        if (supported) {
-            window.addEventListener('DOMNodeInserted', function (e) {
-                polyfillNode(e.originalTarget);
-            }, false);
-            window.addEventListener('DOMAttrModified', function (e) {
-                polyfillNode(e.originalTarget);
-            }, false);
+        if ('MutationObserver' in window) {
+            observer = new MutationObserver(function (mutations) {
+                mutations.forEach(function (mutation) {
+                    if (mutation.type === 'childList') {
+                        [].forEach.call(mutation.addedNodes, polyfillNode);
+                    } else if (mutation.type === 'attributes') {
+                        polyfillNode(mutation.target);
+                    }
+                });
+            });
+            observer.observe(document, {
+                subtree: true,
+                attributes: true,
+                childList: true,
+                characterData: true
+            });
         } else {
             HTMLElement.prototype.appendChild = function (elem) {
                 polyfillNode(elem);
