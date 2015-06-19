@@ -2,6 +2,14 @@
 
 polyfill for css4 function ```image-set()``` (http://dev.w3.org/csswg/css-images/#image-set-notation)
 
+## install
+
+you can install `image-set-polyfill` with `bower` or with `npm`
+
+	bower install --save image-set-polyfill
+
+	npm install --save image-set-polyfill
+
 ## usage
 
 You should only inlude ```image-set-polyfill.js``` on your page

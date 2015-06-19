@@ -1,7 +1,7 @@
 {
   "name": "image-set-polyfill",
   "main": "image-set-polyfill.js",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "homepage": "https://github.com/wtfil/image-set-polyfill",
   "authors": [
     "Evgeniy Filatov"
