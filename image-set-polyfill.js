@@ -106,7 +106,7 @@
      * @return {String} new styles
      */
     function getPolyfilledStyles(styles) {
-        var findImageSetRE = /(?:\-(?:webkit|moz)\-)?image\-set\(((?:a|[^a])*)\)/mg,
+        var findImageSetRE = /(?:\-(?:webkit|moz)\-)?image\-set\(((?:a|[^a;}])*)\)/mg,
             newStyles = '',
             lastIndex = 0,
             match, urls, best;
