@@ -1,25 +1,29 @@
 ## image-set polyfill
 
-polyfill for css4 function ```image-set()``` (http://dev.w3.org/csswg/css-images/#image-set-notation)
+Polyfill for css4 function `image-set()` (http://dev.w3.org/csswg/css-images/#image-set-notation)
 
-## install
+## Install
+You can install `image-set-polyfill` with `bower` or with `npm`:
 
-you can install `image-set-polyfill` with `bower` or with `npm`
+bower:
+```sh
+bower install --save image-set-polyfill
+```
+npm:
+```sh
+npm install --save image-set-polyfill
+```
 
-	bower install --save image-set-polyfill
-
-	npm install --save image-set-polyfill
-
-## usage
-
-You should only inlude ```image-set-polyfill.js``` on your page
+## Usage
+You should only include `image-set-polyfill.js` on your page
 
 ```html
 <script type="text/javascript" src="image-set-polyfill.min.js"></script>
 ```
-## supports
 
-css styles
+## Supports
+
+CSS styles
 ```css
 .smart-image 
 {
@@ -30,7 +34,7 @@ css styles
 }
 ```
 
-inline styles
+Inline styles
 ```html
 <div style="background-image: -webkit-image-set(url(lowdpi.png) 1.0x, url(highydpi.png) 2.0x )"></div>
 ```
